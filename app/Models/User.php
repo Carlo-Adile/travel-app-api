@@ -7,10 +7,30 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    /**
+     * Get all of the travels for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function travels(): HasMany
+    {
+        return $this->hasMany(Travel::class);
+    }
+    /**
+     * Get all of the steps for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function steps(): HasManyThrough
+    {
+        return $this->hasManyThrough(Step::class, Travel::class, 'user_id', 'travel_id');
+    }
 
     /**
      * The attributes that are mass assignable.
