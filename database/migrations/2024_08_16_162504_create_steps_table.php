@@ -12,7 +12,9 @@ return new class extends Migration {
     {
         Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('travel_id')->onDelete('cascade');
+            $table->foreignId('travel_id')
+                ->constrained('travels')
+                ->onDelete('cascade');
             $table->date('day');
             $table->string('title');
             $table->string('slug');
