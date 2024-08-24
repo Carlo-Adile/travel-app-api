@@ -12,7 +12,7 @@
     {{-- segnala errori --}}
     @include('layouts.partials.validation-messages')
 
-    <form action="{{ route('admin.steps.store', $travel->id) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.travels.steps.store', $travel->id) }}" method="post" enctype="multipart/form-data">
       @csrf
 
       <!-- Titolo -->

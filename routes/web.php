@@ -6,12 +6,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\TravelController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return view('welcome');
 });
-
+ */
 Route::get('/', function () {
-    return view('dashboard');
+    return view('welcome');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -26,16 +26,16 @@ Route::middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Risorsa per Travel
+        // Risorse per Travel e Step
         Route::resource('/travels', TravelController::class)->parameters(['travels' => 'travel']);
         Route::resource('travels.steps', StepController::class)->except(['index', 'show']);
 
         // rotte per step
-        Route::get('travels/{travel}/steps/create', [StepController::class, 'create'])->name('steps.create');
+        /* Route::get('travels/{travel}/steps/create', [StepController::class, 'create'])->name('steps.create');
         Route::post('travels/{travel}/steps', [StepController::class, 'store'])->name('steps.store');
         Route::delete('travels/{travel}/steps/{step}', [StepController::class, 'destroy'])->name('steps.destroy');
         Route::get('travels/{travel}/steps/{step}/edit', [StepController::class, 'edit'])->name('steps.edit');
-        Route::put('admin/travels/{travel}/steps/{step}', [StepController::class, 'update'])->name('steps.update');
+        Route::put('admin/travels/{travel}/steps/{step}', [StepController::class, 'update'])->name('steps.update'); */
     });
 
 require __DIR__ . '/auth.php';

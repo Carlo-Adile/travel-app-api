@@ -23,8 +23,19 @@ class StoreTravelRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:55',
-            'start_date' => 'required',
-            'end_date' => 'required'
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d|after_or_equal:start_date'
+        ];
+    }
+    /**
+     * Get the custom error messages for the validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'end_date.after_or_equal' => 'La data di fine deve essere uguale o successiva alla data di inizio.'
         ];
     }
 }

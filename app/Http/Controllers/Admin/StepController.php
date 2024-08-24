@@ -12,15 +12,19 @@ use App\Models\Travel;
 
 class StepController extends Controller
 {
+    public function index()
+    {
+        return Step::whereHas('travel', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create(Travel $travel)
     {
         // Verifica che il viaggio appartenga all'utente
-        if ($travel->user_id !== auth()->id()) {
-            abort(403, 'Non autorizzato');
-        }
+        $this->authorize('create', [Step::class, $travel]);
 
         return view('admin.steps.create', compact('travel'));
     }
@@ -31,9 +35,7 @@ class StepController extends Controller
     public function store(StoreStepRequest $request, Travel $travel)
     {
         // Verifica che il viaggio appartenga all'utente
-        if ($travel->user_id !== auth()->id()) {
-            abort(403, 'Non autorizzato');
-        }
+        $this->authorize('create', [Step::class, $travel]);
 
         // Valida i dati
         $validated = $request->validated();
@@ -66,9 +68,7 @@ class StepController extends Controller
     public function edit(Travel $travel, Step $step)
     {
         // Verifica che la tappa appartenga all'utente
-        if ($step->travel->user_id !== auth()->id()) {
-            abort(403, 'Non autorizzato');
-        }
+        $this->authorize('update', $step);
 
         return view('admin.steps.edit', compact('step'));
     }
@@ -79,9 +79,7 @@ class StepController extends Controller
     public function update(UpdateStepRequest $request, Travel $travel, Step $step)
     {
         // Verifica che la tappa appartenga all'utente
-        if ($step->travel->user_id !== auth()->id()) {
-            abort(403, 'Non autorizzato');
-        }
+        $this->authorize('update', $step);
 
         // Valida i dati
         $validated = $request->validated();
@@ -116,9 +114,7 @@ class StepController extends Controller
     public function destroy(Travel $travel, Step $step)
     {
         // Verifica che la tappa appartenga all'utente
-        if ($step->travel->user_id !== auth()->id()) {
-            abort(403, 'Non autorizzato');
-        }
+        $this->authorize('delete', $step);
 
         if ($step->images) {
             $images = json_decode($step->images);

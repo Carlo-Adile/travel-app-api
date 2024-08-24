@@ -17,9 +17,12 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::where('user_id', auth()->id())->get();
+        // Utilizza la policy per limitare l'accesso alla lista dei viaggi dell'utente
+        $this->authorize('viewAny', Travel::class);
 
-        return view('admin.travels.index', ['travels' => Travel::orderByDesc('id')->paginate(8)]);
+        $travels = Travel::where('user_id', auth()->id())->orderByDesc('id')->paginate(8);
+
+        return view('admin.travels.index', compact('travels'));
     }
 
     /**
@@ -52,9 +55,10 @@ class TravelController extends Controller
      */
     public function show(Travel $travel)
     {
-        if ($travel->user_id !== auth()->id()) {
+        $this->authorize('view', $travel);
+        /* if ($travel->user_id !== auth()->id()) {
             abort(403, 'Non autorizzato');
-        }
+        } */
         return view('admin.travels.show', compact('travel'));
     }
 
@@ -63,6 +67,8 @@ class TravelController extends Controller
      */
     public function edit(Travel $travel)
     {
+        $this->authorize('update', $travel);
+
         return view('admin.travels.edit', compact('travel'));
     }
 
@@ -71,6 +77,7 @@ class TravelController extends Controller
      */
     public function update(UpdateTravelRequest $request, Travel $travel)
     {
+        $this->authorize('update', $travel);
         // Valida i dati
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -90,6 +97,8 @@ class TravelController extends Controller
      */
     public function destroy(Travel $travel)
     {
+        $this->authorize('delete', $travel);
+
         $travel->delete();
 
         return to_route('admin.travels.index')->with('message', "Travel $travel->title deleted correctly");

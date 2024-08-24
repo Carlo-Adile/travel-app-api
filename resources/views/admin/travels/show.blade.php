@@ -5,7 +5,7 @@
     <div class="container d-flex justify-content-between align-items-center">
 
       <h4 class="py-4">Viaggio: {{ $travel->title }}</h4>
-      <a href="{{ route('admin.steps.create', ['travel' => $travel->id]) }}" class="btn btn-primary">
+      <a href="{{ route('admin.travels.steps.create', ['travel' => $travel->id]) }}" class="btn btn-primary">
         Aggiungi una nuova tappa
         <i class="fa-solid fa-pencil"></i>
       </a>
@@ -47,7 +47,8 @@
                 @endif
               </td>
               <td>
-                <a href="{{ route('admin.steps.edit', ['travel' => $travel->id, 'step' => $step->id]) }}" class="btn">
+                <a href="{{ route('admin.travels.steps.edit', ['travel' => $travel->id, 'step' => $step->id]) }}"
+                  class="btn">
                   <i class="fa-solid fa-pencil"></i>
                 </a>
                 {{-- bs5-modal-default --}}
@@ -75,7 +76,8 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                           Chiudi
                         </button>
-                        <form action="{{ route('admin.steps.destroy', ['travel' => $travel->id, 'step' => $step->id]) }}"
+                        <form
+                          action="{{ route('admin.travels.steps.destroy', ['travel' => $travel->id, 'step' => $step->id]) }}"
                           method="post">
                           @csrf
                           @method('DELETE')

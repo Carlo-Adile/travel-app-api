@@ -16,8 +16,8 @@
     {{-- segnala errori --}}
     @include('layouts.partials.validation-messages')
 
-    <form action="{{ route('admin.steps.update', ['travel' => $step->travel_id, 'step' => $step->id]) }}" method="post"
-      enctype="multipart/form-data">
+    <form action="{{ route('admin.travels.steps.update', ['travel' => $step->travel_id, 'step' => $step->id]) }}"
+      method="post" enctype="multipart/form-data">
       @csrf
       @method('PUT')
 
