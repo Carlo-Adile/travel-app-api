@@ -16,7 +16,7 @@ class TravelController extends Controller
     public function index()
     {
         // Mostra solo i viaggi dell'utente autenticato
-        return Travel::where('user_id', Auth::id())->get();
+        return Travel::where('user_id', Auth::id())->orderBy('start_date')->get();
     }
 
     public function store(StoreTravelRequest $request)
@@ -26,6 +26,19 @@ class TravelController extends Controller
         $validated = $request->validated();
         $validated['user_id'] = Auth::id();
         $validated['slug'] = Str::slug($validated['title'], '-');
+
+        // Gestione dell'immagine di copertura se presente
+        if ($request->hasFile('cover_image')) {
+            try {
+                $file = $request->file('cover_image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->move(public_path('cover_images'), $filename);
+
+                $validated['cover_image'] = 'cover_images/' . $filename;
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'The cover image failed to upload.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+        }
 
         $travel = Travel::create($validated);
 

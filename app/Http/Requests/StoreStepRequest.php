@@ -29,9 +29,6 @@ class StoreStepRequest extends FormRequest
         // Forzare la timezone alla data ricevuta dal frontend
         $requestDay = Carbon::createFromFormat('Y-m-d', $this->day, 'Europe/Berlin')->startOfDay();
 
-        \Log::info('Data di inizio del viaggio: ' . $travelStartDate);
-        \Log::info('Data richiesta per la tappa (con timezone): ' . $requestDay->toDateString());
-
         return [
             'travel_id' => 'required|exists:travels,id',
             'day' => [
@@ -43,10 +40,9 @@ class StoreStepRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'time' => 'required|date_format:H:i',
-            'cost' => 'nullable|numeric|between:0,999999.1999',
-            'checked' => 'boolean',
-            'images.*' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:4096',
-            'google_maps_link' => 'nullable|url|max:255',
+            'tag' => 'nullable|string|max:255',
+            'lat' => 'nullable|numeric|between:-90,90',
+            'lng' => 'nullable|numeric|between:-180,180',
         ];
     }
     /**

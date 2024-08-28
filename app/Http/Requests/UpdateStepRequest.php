@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class UpdateStepRequest extends FormRequest
 {
@@ -22,23 +24,21 @@ class UpdateStepRequest extends FormRequest
     public function rules(): array
     {
         $travel = $this->route('travel');
-        $travelStartDate = $travel ? $travel->start_date : now();
-        $travelEndDate = $travel ? $travel->end_date : now();
+        $travelStartDate = $travel ? $travel->start_date : now()->toDateString();
+        $travelEndDate = $travel ? $travel->end_date : now()->toDateString();
+
+        // Forzare la timezone alla data ricevuta dal frontend
+        $requestDay = Carbon::createFromFormat('Y-m-d', $this->day)->startOfDay();
+        /* dd($this->day, $requestDay->toDateString(), $travelStartDate, $travelEndDate); */
 
         return [
-            'day' => [
-                'sometimes|required',
-                'date',
-                'after_or_equal:' . $travelStartDate,
-                'before_or_equal:' . $travelEndDate,
-            ],
-            'title' => 'sometimes|required|string|max:255',
+            'day' => 'required|date',
+            'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|nullable|string',
-            'time' => 'sometimes|required|date_format:H:i',
-            'cost' => 'sometimes|nullable|numeric|between:0,999999.1999',
-            'checked' => 'sometimes|boolean',
-            'images.*' => 'sometimes|nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'google_maps_link' => 'sometimes|nullable|url|max:255',
+            'time' => 'sometimes|date_format:H:i',
+            'tag' => 'nullable|string|max:255',
+            'lat' => 'nullable|numeric|between:-90,90',
+            'lng' => 'nullable|numeric|between:-180,180',
         ];
     }
     /**

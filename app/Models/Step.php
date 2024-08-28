@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Step extends Model
 {
     use HasFactory;
-    protected $fillable = ['travel_id', 'day', 'title', 'slug', 'description', 'time', 'cost', 'checked', 'images', 'google_maps_link', 'travel_id'];
+    protected $fillable = ['travel_id', 'day', 'title', 'slug', 'description', 'time', 'tag', 'lat', 'lng'];
     protected $casts = [
         'images' => 'array',
     ];

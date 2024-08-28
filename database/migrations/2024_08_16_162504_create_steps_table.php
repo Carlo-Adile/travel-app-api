@@ -20,10 +20,9 @@ return new class extends Migration {
             $table->string('slug');
             $table->text('description')->nullable();
             $table->time('time');
-            $table->decimal('cost', 8, 2)->nullable();
-            $table->boolean('checked')->default(false);
-            $table->json('images')->nullable();
-            $table->string('google_maps_link')->nullable();
+            $table->string('tag')->nullable();
+            $table->decimal('lat', 10, 6)->nullable();
+            $table->decimal('lng', 10, 6)->nullable();
             $table->timestamps();
         });
     }

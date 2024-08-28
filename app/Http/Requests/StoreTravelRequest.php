@@ -24,7 +24,8 @@ class StoreTravelRequest extends FormRequest
         return [
             'title' => 'required|string|max:55',
             'start_date' => 'required|date_format:Y-m-d',
-            'end_date' => 'required|date_format:Y-m-d|after_or_equal:start_date'
+            'end_date' => 'required|date_format:Y-m-d|after_or_equal:start_date',
+            'cover_image' => 'nullable|image|mimes:jpg,png,jpeg,gif,jfif|max:4096',
         ];
     }
     /**

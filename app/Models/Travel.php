@@ -12,7 +12,7 @@ class Travel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'start_date', 'end_date', 'user_id'];
+    protected $fillable = ['title', 'slug', 'start_date', 'end_date', 'user_id', 'cover_image'];
 
     // Specifica il nome della tabella se diverso dalla convenzione plurale
     protected $table = 'travels';
@@ -24,7 +24,7 @@ class Travel extends Model
      */
     public function steps(): HasMany
     {
-        return $this->hasMany(Step::class);
+        return $this->hasMany(Step::class)->orderBy('day', 'asc')->orderBy('time', 'asc');
     }
     /**
      * Get the user that owns the Travel

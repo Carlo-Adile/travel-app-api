@@ -25,8 +25,11 @@ class StepController extends Controller
         // Verifica che il viaggio appartenga all'utente autenticato
         $this->authorize('view', $travel);
 
-        // Recupera tutte le tappe del viaggio
-        $steps = $travel->steps()->get();
+        // Recupera tutte le tappe del viaggio e ordina per day e poi per time
+        $steps = $travel->steps()
+            ->orderBy('day', 'asc')
+            ->orderBy('time')
+            ->get();
 
         return response()->json([
             'data' => $steps
@@ -41,9 +44,6 @@ class StepController extends Controller
      */
     public function store(StoreStepRequest $request, Travel $travel): JsonResponse
     {
-        // Recupera il viaggio per la validazione
-        $travel = Travel::find($request->input('travel_id'));
-
         // Verifica che il viaggio appartenga all'utente autenticato
         $this->authorize('create', [Step::class, $travel]);
 
@@ -88,7 +88,7 @@ class StepController extends Controller
         $this->authorize('update', [$step, $travel]);
 
         // Prepara i dati da aggiornare
-        $data = $request->only(['title', 'day', 'time', 'description', 'cost', 'google_maps_link', 'checked']);
+        $data = $request->only(['title', 'day', 'time', 'description', 'tag', 'lat', 'lng']);
 
         // Aggiorna solo i campi presenti nei dati validati
         $step->update($data);
