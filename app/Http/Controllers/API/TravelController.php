@@ -32,9 +32,11 @@ class TravelController extends Controller
             try {
                 $file = $request->file('cover_image');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->move(public_path('cover_images'), $filename);
 
-                $validated['cover_image'] = 'cover_images/' . $filename;
+                // Usa Storage per gestire i file
+                $path = $file->storeAs('cover_images', $filename, 'public');
+
+                $validated['cover_image'] = $path;
             } catch (\Exception $e) {
                 return response()->json(['message' => 'The cover image failed to upload.'], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
@@ -86,9 +88,11 @@ class TravelController extends Controller
             try {
                 $file = $request->file('cover_image');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->move(public_path('cover_images'), $filename);
 
-                $validated['cover_image'] = 'cover_images/' . $filename;
+                // Usa Storage per gestire i file
+                $path = $file->storeAs('cover_images', $filename, 'public');
+
+                $validated['cover_image'] = $path;
             } catch (\Exception $e) {
                 return response()->json(['message' => 'The cover image failed to upload.'], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
