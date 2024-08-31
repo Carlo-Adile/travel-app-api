@@ -71,9 +71,33 @@ class TravelController extends Controller
 
     public function update(UpdateTravelRequest $request, Travel $travel)
     {
+
+        \Log::info('Dati ricevuti:', $request->all());
+
         $this->authorize('update', $travel);
 
-        $travel->update($request->validated());
+        // Ottieni i dati validati dal request
+        $validated = $request->validated();
+
+        // Log dei dati per debug
+        \Log::info('Dati validati:', $validated);
+
+        if ($request->hasFile('cover_image')) {
+            try {
+                $file = $request->file('cover_image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->move(public_path('cover_images'), $filename);
+
+                $validated['cover_image'] = 'cover_images/' . $filename;
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'The cover image failed to upload.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+        }
+
+        // Log dei dati dopo il tentativo di aggiornamento
+        \Log::info('Dati prima dell\'aggiornamento:', $travel->toArray());
+
+        $travel->update($validated);
 
         return response()->json([
             'message' => 'Viaggio aggiornato con successo.',
